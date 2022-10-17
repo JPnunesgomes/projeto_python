@@ -1,40 +1,16 @@
-from mailbox import NotEmptyError
 import tkinter as tk
 import mysql.connector
-#from PIL import ImageTk, Image
-#from numpy import imag
-#pip install mysql-connector (instalar o Mysql, executar no cmd)
+#pip install mysql-connector
 
+class Usuarios:
+        def __init__(self, id, nome,sobrenome,cidade,estado,data_nascimento):
+                self.id = id
+                self.nome = nome
+                self.sobrenome = sobrenome
+                self.cidade = cidade
+                self.estado = estado
+                self.data_nascimento = data_nascimento
 
-class usuarios():
-                def __init__(self,id, nome, sobrenome, cidade, estado, data_nascimento):
-                        self.id = id
-                        self.nome = nome
-                        self.sobrenome = sobrenome
-                        self.cidade =  cidade
-                        self.estado = estado
-                        self.data_nascimento = data_nascimento
-
-                def __repr__(self):
-                        return 'This is object of usuarios'
-
-                def __str__(self):
-                        print('id =', id)
-                        print('nome =', nome)
-                        print('sobrenome =', sobrenome)
-                        print('cidade =', cidade)
-                        print('estado =', estado)
-                        print('data_nascimento =' data_nascimento)
-
-def desconectar(conexao):
-        if conexao:
-                conexao.close()
-
-def selecionarUsuarios():
-        conn = conexao()
-        cursor = conn.cursor()
-        cursor.execute("SELECT * FROM USUARIOS")
-                
 
 def conexao():
         try:
@@ -47,16 +23,23 @@ def conexao():
                 print("conectado")
                 return conexao
         except mysql.connector.Error as e:
-                print(f'Erro ao conectar o servidor mysql: {e}')
-        #try e o except devem ser executados na mesma linha
+                print(f'Erro ao conectar no Servidor MySql: {e}')
 
+def desconectar(conexao):
+        if conexao:
+                conexao.close()
+
+def selecionarUsuarios():
+        conn = conexao()
+        cursor = conn.cursor()
+        cursor.execute("SELECT * FROM USUARIOS")
 
 def cadastrarUsuarios():
     janelaUsuarios = tk.Toplevel(app)
 
     lblNome = tk.Label(janelaUsuarios,text="Informe o seu nome: "
             ,font="Times"
-            ,foreground="black")
+            ,bg="white",foreground="black")
     lblNome.place(x=100,y=50)
 
     entryNome = tk.Entry(janelaUsuarios)
@@ -64,34 +47,32 @@ def cadastrarUsuarios():
     
     lblSobrenome = tk.Label(janelaUsuarios,text="Informe o seu sobrenome: "
             ,font="Times"
-            ,foreground="black")
+            ,bg="white",foreground="black")
     lblSobrenome.place(x=100,y=75)
     entrySobrenome = tk.Entry(janelaUsuarios)
     entrySobrenome.place(x=260, y=75)
 
-    lblDataNascimento = tk.Label(janelaUsuarios,text="Informe sua data de nascimento:"
+    lblDataNascimento = tk.Label(janelaUsuarios,text="Informe sua data de nascimento"
             ,font="Times"
-            , foreground="black")
+            ,bg="white", foreground="black")
     lblDataNascimento.place(x=100, y=100)
     entryDataNascimento = tk.Entry(janelaUsuarios)
     entryDataNascimento.place(x=300, y=100)
 
-    lblCidade = tk.Label(janelaUsuarios,text="Informe a sua cidade:"
+    lblCidade = tk.Label(janelaUsuarios,text="Informe a sua cidade"
             ,font="Times"
-            , foreground="black")
+            ,bg="white", foreground="black")
     lblCidade.place(x=100,y=125)
     entryCidade = tk.Entry(janelaUsuarios)
     entryCidade.place(x=230,y=125)
 
     lblEstado = tk.Label(janelaUsuarios, text="Informe o estado: "
             ,font="Times"
-            ,foreground="black")
+            ,bg="white",foreground="black")
     lblEstado.place(x=100, y=150)
     entryEstado = tk.Entry(janelaUsuarios)
     entryEstado.place(x=230, y=150)
-
-            
-
+    
     def salvarUsuario():
         conn = conexao()
         print("O nome informado foi: ",entryNome.get())
@@ -131,5 +112,6 @@ menuPrincipal.add_cascade(label="Funcao"
 #buttonExample.place(x=100,y=50)
 app.title("Sistema Tarumã")
 app.geometry("800x600")
+
 app.mainloop()
 app.destroy()
