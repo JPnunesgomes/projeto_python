@@ -51,6 +51,21 @@ def selecionarUsuarios(janelaUsuarios):
         
         def item_selected(self):
                 item = tree.focus()
+
+                global id_usuario
+                global nome_usuario
+                global sobrenome_usuario
+                global cidade_usuario
+                global estado_usuario
+                global data_usuario
+
+                id_usuario.set(tree.item(item)["values"][0])
+                nome_usuario.set(tree.item(item)["values"][1])
+                sobrenome_usuario.set(tree.item(item)["values"][2])
+                cidade_usuario.set(tree.item(item)["values"][3])
+                estado_usuario.set(tree.item(item)["values"][4])
+                data_usuario.set(tree.item(item)["values"][5])
+
         tree.bind('<<TreeviewSelect>>', item_selected)
         tree.grid(row=0, column=0, sticky=tk.NSEW)
 
@@ -74,6 +89,16 @@ def inserirUsuarios(usuario):
         f"VALUES('{usuario.id}','{usuario.nome}','{usuario.sobrenome}','{usuario.cidade}','{usuario.estado}','{usuario.data_nascimento}')")
         con.commit()
         desconectar(con)
+def deletarUsuarios():
+        conn= conexao()
+        if(entryId.get()):
+                cursor = conn.cursor()
+                sql = f"DELETE FROM usuarios where id = {entryId.get()}"
+                cursor.execute(sql)
+                conn.commit()
+                selecionarUsuarios(janelaUsuarios)
+        else:
+                showinfo(title= 'informação', message='Erro, id não informado')
 
 def abrirTelaUsuarios():
     janelaUsuarios = tk.Toplevel(app)
@@ -82,7 +107,7 @@ def abrirTelaUsuarios():
     lblId = tk.Label(janelaUsuarios, text="informe ID", font="Times", foreground="black")
     lblId.place(x=100,y=230)
 
-    entryId = tk.Entry(janelaUsuarios)
+    entryId = tk.Entry(janelaUsuarios, textvariable=id_usuario)
     entryId.place(x=230,y=255)
 
     lblNome = tk.Label(janelaUsuarios,text="Informe o seu nome: "
@@ -90,35 +115,35 @@ def abrirTelaUsuarios():
             ,bg="white",foreground="black")
     lblNome.place(x=100,y=250)
 
-    entryNome = tk.Entry(janelaUsuarios)
+    entryNome = tk.Entry(janelaUsuarios, textvariable=nome_usuario)
     entryNome.place(x=230,y=255)
     
     lblSobrenome = tk.Label(janelaUsuarios,text="Informe o seu sobrenome: "
             ,font="Times"
             ,bg="white",foreground="black")
     lblSobrenome.place(x=100,y=275)
-    entrySobrenome = tk.Entry(janelaUsuarios)
+    entrySobrenome = tk.Entry(janelaUsuarios, textvariable=sobrenome_usuario)
     entrySobrenome.place(x=260, y=275)
 
     lblDataNascimento = tk.Label(janelaUsuarios,text="Informe sua data de nascimento"
             ,font="Times"
             ,bg="white", foreground="black")
     lblDataNascimento.place(x=100, y=300)
-    entryDataNascimento = tk.Entry(janelaUsuarios)
+    entryDataNascimento = tk.Entry(janelaUsuarios, textvariable=data_usuario)
     entryDataNascimento.place(x=300, y=300)
 
     lblCidade = tk.Label(janelaUsuarios,text="Informe a sua cidade"
             ,font="Times"
             ,bg="white", foreground="black")
     lblCidade.place(x=100,y=325)
-    entryCidade = tk.Entry(janelaUsuarios)
+    entryCidade = tk.Entry(janelaUsuarios, textvariable=cidade_usuario)
     entryCidade.place(x=230,y=325)
 
     lblEstado = tk.Label(janelaUsuarios, text="Informe o estado: "
             ,font="Times"
             ,bg="white",foreground="black")
     lblEstado.place(x=100, y=350)
-    entryEstado = tk.Entry(janelaUsuarios)
+    entryEstado = tk.Entry(janelaUsuarios, textvariable=estado_usuario)
     entryEstado.place(x=230, y=350)
     
     def salvarUsuario():
@@ -139,6 +164,13 @@ def abrirTelaProdutos():
     janelaProduto.title("Cadastro de Produtos")
     janelaProduto.geometry("800x600")
 app = tk.Tk()
+
+id_usuario = tk.StringVar()
+nome_usuario = tk.StringVar()
+sobrenome_usuario = tk.StringVar()
+cidade_usuario = tk.StringVar()
+estado_usuario = tk.StringVar()
+data_usuario = tk.StringVar()
 
 menuPrincipal = tk.Menu(app)
 app.config(menu=menuPrincipal)
